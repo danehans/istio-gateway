@@ -1,0 +1,11 @@
+gateways:
+  public:
+    ingressGateway: "public-ingressgateway"
+    hosts:
+      - "*.{{ .Values.hostname }}"
+    tls:
+      key: ""
+      cert: ""
+flux: {}
+values: {}
+postRenderers: []

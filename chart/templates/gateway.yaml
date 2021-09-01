@@ -1,0 +1,25 @@
+{{- if .Values.gateway }}
+{{- required "`gateway` value has been deprecated.  Please use the new format in the `gateways` value." "" }}
+{{- end }}
+
+{{- range $name, $values := .Values.gateways }}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  selector:
+    {{- $values.selector | default (dict) | toYaml | nindent 4 }}
+  servers:
+  - hosts:
+    - "*"
+    port:
+      name: http
+      number: 8080
+      protocol: HTTP
+    tls:
+      httpsRedirect: true
+    {{- tpl (toYaml $values.servers) $ | nindent 2 }}
+{{- end }}
